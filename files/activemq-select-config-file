@@ -1,0 +1,43 @@
+#!/bin/bash
+
+activemq_dir=/etc/activemq
+activemq_config="${activemq_dir}/activemq.xml"
+whatami=/usr/local/sbin/whatami
+
+# copies the correct activemq.yaml for AZ at bootup
+#
+
+# Create an associative array (hash) to store node data
+declare -A nodedata
+
+# parse the output of whatami and store in the nodedata hash
+#  - we strip the ":" from the key name
+#  - we use process substitution to get the output of whatami as piping creates
+#    a subshell. http://mywiki.wooledge.org/BashFAQ/024
+while read _key _val ; do
+  nodedata["${_key%:}"]="$_val"
+done < <($whatami)
+
+# check we have retrieved az
+[[ -z "${nodedata[az]}" ]] && {
+  echo "az not found in nodedata"
+  exit 1
+}
+
+# check we have an az config for the specified az
+az_config="${activemq_config}.${nodedata[az]}"
+[[ -f "${az_config}" ]] || {
+  echo "config not found for az ${nodedata[az]}"
+  exit 1
+}
+
+# remove any existing config and copy the az config in place
+rm -f "${activemq_config}"
+cp "$az_config" "$activemq_config"
+
+# set the correct ownership/perms for the file
+chown activemq:activemq "$activemq_config"
+chmod 0440 "$activemq_config"
+
+# finally, restart activemq
+/sbin/service activemq restart
