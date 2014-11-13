@@ -42,7 +42,7 @@ class profile_activemq{
   Class['::activemq']
 
   # cloudinit script to select the correct activemq file at boot
-  profile_common::cloudinit::script{'activemq-select-config-file':
+  cloudinit::script{'activemq-select-config-file':
     source => "puppet:///modules/${module_name}/activemq-select-config-file",
   }
 
