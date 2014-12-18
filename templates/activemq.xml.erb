@@ -179,7 +179,7 @@
     <!-- destroy the spring context on shutdown to stop jetty -->
     <!-- DEfine SSL contexts. -->
     <sslContext>
-      <sslContext keyStore="<%= @real_keystore %>" keyStorePassword="<%= @real_keystore_pass %>" trustStore="<%= @real_truststore %>" trustStorePassword="<%= @real_truststore_pass %>"></sslContext>
+      <sslContext keyStore="<%= @real_keystore_path %>" keyStorePassword="<%= @real_keystore_pass %>" trustStore="<%= @real_truststore_path %>" trustStorePassword="<%= @real_truststore_pass %>"></sslContext>
     </sslContext>
     <shutdownHooks>
       <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />

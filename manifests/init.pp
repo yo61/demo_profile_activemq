@@ -1,17 +1,17 @@
 # create an activemq server
 class profile_activemq{
 
-  $broker_username = hiera('activemq.broker.username')
-  $broker_password = hiera('activemq.broker.password')
-  $client_username = hiera('activemq.client.username')
-  $client_password = hiera('activemq.client.password')
-  $server_username = hiera('activemq.server.username')
-  $server_password = hiera('activemq.server.password')
-  $truststore_pass = hiera('activemq.truststore.password')
-  $keystore_pass   = hiera('activemq.keystore.password')
+  $broker_username = hiera('activemq/broker.username')
+  $broker_password = hiera('activemq/broker.password')
+  $client_username = hiera('activemq/client.username')
+  $client_password = hiera('activemq/client.password')
+  $server_username = hiera('activemq/server.username')
+  $server_password = hiera('activemq/server.password')
+  $truststore_pass = hiera('activemq/truststore.password')
+  $keystore_pass   = hiera('activemq/keystore.password')
   $env             = hiera('env')
   $domain          = hiera('domain')
-  $env_azs         = hiera('env.azs')
+  $env_azs         = hiera('availability_zones')
 
   validate_array($env_azs)
 
@@ -48,7 +48,7 @@ class profile_activemq{
 
   # upload the java truststore and keystore, used for ssl
   Package['activemq']->
-  class{'::profile_activemq::ssl':}~>
+  class{'::profile_activemq::ssl': }~>
   Service['activemq']
 
   contain profile_yo61repo

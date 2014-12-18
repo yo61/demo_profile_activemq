@@ -5,8 +5,8 @@ class profile_activemq::params{
   $config = "${confdir}/activemq.xml"
 
   $ssldir = "${confdir}/ssl"
-  $truststore = "${ssldir}/truststore.jks"
-  $keystore = "${ssldir}/keystore.jks"
+  $truststore_path = "${ssldir}/truststore.jks"
+  $keystore_path = "${ssldir}/keystore.jks"
 
   $user = 'activemq'
   $group = 'activemq'

@@ -1,11 +1,14 @@
 # put truststore and keystore in place
 class profile_activemq::ssl(
   $ssldir = $profile_activemq::params::ssldir,
-  $truststore = $profile_activemq::params::truststore,
-  $keystore = $profile_activemq::params::keystore,
+  $truststore_path = $profile_activemq::params::truststore_path,
+  $keystore_path = $profile_activemq::params::keystore_path,
   $owner = $::profile_activemq::params::user,
   $group = $::profile_activemq::params::group,
 ) inherits ::profile_activemq::params {
+
+  $truststore = hiera('activemq/truststore.jks')
+  $keystore   = hiera('activemq/keystore.jks')
 
   file{
     $ssldir:
@@ -13,18 +16,18 @@ class profile_activemq::ssl(
       owner  => $owner,
       group  => $owner,
       mode   => '0550';
-    $truststore:
-      ensure => file,
-      source => 'file:///var/tmp/puppet/files/truststore.jks',
-      owner  => $owner,
-      group  => $owner,
-      mode   => '0440';
-    $keystore:
-      ensure => file,
-      source => 'file:///var/tmp/puppet/files/keystore.jks',
-      owner  => $owner,
-      group  => $owner,
-      mode   => '0440';
+    $truststore_path:
+      ensure  => file,
+      content => $truststore,
+      owner   => $owner,
+      group   => $owner,
+      mode    => '0440';
+    $keystore_path:
+      ensure  => file,
+      content => $keystore,
+      owner   => $owner,
+      group   => $owner,
+      mode    => '0440';
   }
 
 }
