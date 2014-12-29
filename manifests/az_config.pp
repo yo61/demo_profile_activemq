@@ -9,24 +9,14 @@ define profile_activemq::az_config(
   $client_password,
   $env,
   $domain,
-  $config = undef,
-  $owner = undef,
-  $group = undef,
-  $truststore_path = undef,
-  $truststore_pass = undef,
-  $keystore_path = undef,
-  $keystore_pass = undef,
+  $config,
+  $owner,
+  $group,
+  $truststore_path,
+  $truststore_pass,
+  $keystore_path,
+  $keystore_pass,
 ) {
-
-  include ::profile_activemq::params
-
-  $real_config = pick($config, $::profile_activemq::params::config)
-  $real_owner = pick($owner, $::profile_activemq::params::user)
-  $real_group = pick($group, $::profile_activemq::params::group)
-  $real_truststore_path = pick($truststore_path, $::profile_activemq::params::truststore_path)
-  $real_truststore_pass = pick($truststore_pass, $::profile_activemq::params::truststore_pass)
-  $real_keystore_path = pick($keystore_path, $::profile_activemq::params::keystore_path)
-  $real_keystore_pass = pick($keystore_pass, $::profile_activemq::params::keystore_pass)
 
   # the config file iwill be created for the availability zone
   # specified as the name of this resource.
@@ -36,10 +26,10 @@ define profile_activemq::az_config(
     fail('The name of the az_config resource must be the name of an Availability zone for this environment, ie. in the env_azs array parameter')
   }
 
-  file{"${real_config}.${name}":
+  file{"${config}.${name}":
     ensure  => file,
-    owner   => $real_owner,
-    group   => $real_group,
+    owner   => $owner,
+    group   => $group,
     mode    => '0440',
     content => template("${module_name}/activemq.xml.erb"),
   }

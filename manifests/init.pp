@@ -15,15 +15,20 @@ class profile_activemq{
 
   validate_array($env_azs)
 
-  class{ 'profile_yo61repo': }
-  class{ 'java':
-    distribution => 'jdk',
-    version      => 'latest'
-  }->
-  class{'activemq':}->
+  include ::profile_activemq::params
+
+  # set variables needed by server config template
+  $config = $::profile_activemq::params::config
+  $owner = $::profile_activemq::params::user
+  $group = $::profile_activemq::params::group
+  $truststore_path = $::profile_activemq::params::truststore_path
+  $keystore_path = $::profile_activemq::params::keystore_path
+  $az = $::whatami_az
 
   # create a configuration file for each AZ listed in environment AZs
   # a cloudinit script will select the correct one at instance boot
+  # The activemq class will also generate a valid config file for the
+  # AZ in which the node is booted.
   profile_activemq::az_config{$env_azs:
     env_azs         => $env_azs,
     broker_username => $broker_username,
@@ -34,9 +39,24 @@ class profile_activemq{
     client_password => $client_password,
     env             => $env,
     domain          => $domain,
+    config          => $config,
+    owner           => $owner,
+    group           => $group,
+    truststore_path => $truststore_path,
     truststore_pass => $truststore_pass,
+    keystore_path   => $keystore_path,
     keystore_pass   => $keystore_pass,
   }
+
+  class{ 'profile_yo61repo': }
+  class{ 'java':
+    distribution => 'jdk',
+    version      => 'latest'
+  }->
+  class{'activemq':
+    server_config => template("${module_name}/activemq.xml.erb")
+  }
+
 
   Class['::profile_yo61repo']->
   Class['::activemq']
