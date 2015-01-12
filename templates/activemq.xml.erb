@@ -123,6 +123,12 @@
 	      <authorizationEntry queue="<%= @env %>.reply.>" write="servers" admin="servers" />
 	      <authorizationEntry topic="<%= @env %>.*.agent" read="servers" admin="servers" />
 	      <authorizationEntry topic="<%= @env %>.registration.agent" write="servers" read="servers" admin="servers" />
+	      <authorizationEntry queue="<%= @whatami_region %>.>" write="clients" read="clients" admin="clients" />
+	      <authorizationEntry topic="<%= @whatami_region %>.>" write="clients" read="clients" admin="clients" />
+	      <authorizationEntry queue="<%= @whatami_region %>.nodes" read="servers" admin="servers" />
+	      <authorizationEntry queue="<%= @whatami_region %>.reply.>" write="servers" admin="servers" />
+	      <authorizationEntry topic="<%= @whatami_region %>.*.agent" read="servers" admin="servers" />
+	      <authorizationEntry topic="<%= @whatami_region %>.registration.agent" write="servers" read="servers" admin="servers" />
 	      <authorizationEntry topic="ActiveMQ.Advisory.>" read="everyone" write="everyone" admin="everyone" />
 <% @env_azs.sort.each do |env_az| -%>
 	      <authorizationEntry queue="<%= env_az %>.>" write="clients" read="clients" admin="clients" />
@@ -130,6 +136,7 @@
 	      <authorizationEntry queue="<%= env_az %>.nodes" read="servers" admin="servers" />
 	      <authorizationEntry queue="<%= env_az %>.reply.>" write="servers" admin="servers" />
 	      <authorizationEntry topic="<%= env_az %>.*.agent" read="servers" admin="servers" />
+	      <authorizationEntry topic="<%= env_az %>.registration.agent" write="servers" read="servers" admin="servers" />
 <% end -%>
 	    </authorizationEntries>
 	  </authorizationMap>
