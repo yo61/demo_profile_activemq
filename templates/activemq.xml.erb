@@ -179,7 +179,7 @@
     <networkConnectors>
 <% @env_azs.sort.each do |env_az| -%>
 <% if env_az != @az -%>
-	  <networkConnector name='<%= env_az %>' duplex="true" uri='static:(ssl://amq-<%= env_az %>-<%= @env %>.<%= @domain %>:61617)' userName='<%= @broker_username %>' password='<%= @broker_password %>' />
+      <networkConnector name='<%= @az %>-<%= env_az %>' duplex="true" uri='static:(ssl://amq-<%= env_az %>-<%= @env %>.<%= @domain %>:61617)' userName='<%= @broker_username %>' password='<%= @broker_password %>' />
 <% end -%>
 <% end -%>
     </networkConnectors>
