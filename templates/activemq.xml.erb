@@ -168,12 +168,16 @@
 	  http://activemq.apache.org/configuring-transports.html
 	-->
     <transportConnectors>
+      <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
       <transportConnector name="openwire+ssl" uri="ssl://0.0.0.0:61617?needClientAuth=true&amp;maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600" />
       <transportConnector name="stomp+nio+ssl" uri="stomp+nio+ssl://0.0.0.0:61614?needClientAuth=true&amp;maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600" />
-      <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
+      <!--
+        Configure a non-ssl connector that the ELB health check can hit.
+        Connections will only be allowed from the ELB, and no listener will be set up on this port.
+      -->
+	    <transportConnector name="stomp+nio" uri="stomp+nio://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
       <!--
 	    <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
-	    <transportConnector name="stomp+nio" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
       -->
     </transportConnectors>
     <networkConnectors>
