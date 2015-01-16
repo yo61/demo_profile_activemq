@@ -183,7 +183,32 @@
     <networkConnectors>
 <% @env_azs.sort.each do |env_az| -%>
 <% if env_az != @az -%>
-      <networkConnector name='<%= @az %>-<%= env_az %>' duplex="true" uri='static:(ssl://amq-<%= env_az %>-<%= @env %>.<%= @domain %>:61617)' userName='<%= @broker_username %>' password='<%= @broker_password %>' />
+      <networkConnector
+        name='<%= @az %>-<%= env_az %>-topics'
+        uri='static:(ssl://amq-<%= env_az %>-<%= @env %>.<%= @domain %>:61617)'
+        userName='<%= @broker_username %>'
+        password='<%= @broker_password %>'
+        duplex="true"
+        decreaseNetworkConsumerPriority="true"
+        networkTTL="2"
+        dynamicOnly="true">
+        <excludedDestinations>
+          <queue physicalName=">" />
+        </excludedDestinations>
+      </networkConnector>
+      <networkConnector
+        name='<%= @az %>-<%= env_az %>-queues'
+        uri='static:(ssl://amq-<%= env_az %>-<%= @env %>.<%= @domain %>:61617)'
+        userName='<%= @broker_username %>'
+        password='<%= @broker_password %>'
+        duplex="true"
+        decreaseNetworkConsumerPriority="true"
+        networkTTL="2"
+        dynamicOnly="true">
+        <excludedDestinations>
+          <topic physicalName=">" />
+        </excludedDestinations>
+      </networkConnector>
 <% end -%>
 <% end -%>
     </networkConnectors>
