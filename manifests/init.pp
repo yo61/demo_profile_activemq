@@ -48,7 +48,9 @@ class profile_activemq{
     keystore_pass   => $keystore_pass,
   }
 
-  class{ 'profile_yo61repo': }
+  # Include yo61repo rather than instantiating a class to avoid conflict
+  # with other modules.
+  include ::profile_yo61repo
   class{ 'java':
     distribution => 'jdk',
     version      => 'latest'
@@ -57,9 +59,11 @@ class profile_activemq{
     server_config => template("${module_name}/activemq.xml.erb")
   }
 
-
+  # make sure the yo61repo comes before the activemq class
   Class['::profile_yo61repo']->
   Class['::activemq']
+
+
 
   # cloudinit script to select the correct activemq file at boot
   cloudinit::script{'activemq-select-config-file':
