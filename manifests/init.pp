@@ -75,7 +75,4 @@ class profile_activemq{
   class{'::profile_activemq::ssl': }~>
   Service['activemq']
 
-  contain profile_yo61repo
-  contain java
-  contain activemq
 }
